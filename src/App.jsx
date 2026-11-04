@@ -1,46 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import DownloadSection from './components/DownloadSection';
 import SkillsSection from './components/SkillsSection';
 import FeaturesSection from './components/FeaturesSection';
 import InstallationGuide from './components/InstallationGuide';
 import Footer from './components/Footer';
-import ReleaseCountdown from './components/ReleaseCountdown';
-import { Check, Lock } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 const MARKETPLACE_URL = 'https://marketplace.visualstudio.com/items?itemName=MPUTRARAMADHANI.putracodeai';
 
 export default function App() {
   const [copied, setCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
-
-  // Target: Today at 14:00:00 (2:00 PM local time)
-  const getTargetTimestamp = () => {
-    const target = new Date();
-    target.setHours(14, 0, 0, 0);
-    return target.getTime();
-  };
-
-  // Check if countdown has finished or if developer preview bypass is requested
-  const [isReleased, setIsReleased] = useState(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('preview') === 'true') return true;
-    return new Date().getTime() >= getTargetTimestamp();
-  });
-
-  // Watch countdown interval
-  useEffect(() => {
-    if (isReleased) return;
-
-    const timer = setInterval(() => {
-      if (new Date().getTime() >= getTargetTimestamp()) {
-        setIsReleased(true);
-        clearInterval(timer);
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isReleased]);
 
   const showToast = (message) => {
     setToastMessage(message);
@@ -61,12 +32,7 @@ export default function App() {
     showToast('Membuka halaman resmi PutraCodeAi di Visual Studio Marketplace...');
   };
 
-  // If countdown is not finished yet, show the countdown release gatekeeper page
-  if (!isReleased) {
-    return <ReleaseCountdown />;
-  }
-
-  // Full Landing Page (Shown after 14:00 or when Developer Bypass is clicked)
+  // Full Landing Page (Countdown completely removed)
   return (
     <div className="min-h-screen bg-[#07080B] text-slate-100 flex flex-col font-sans selection:bg-zinc-700 selection:text-white">
       
